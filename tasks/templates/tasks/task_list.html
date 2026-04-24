@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Vazifalar</title>
+</head>
+<body>
+    <h1>Vazifalar ro'yxati</h1>
+
+    <p>
+        <a href="/admin/">Admin panel</a>
+    </p>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {% if task.is_completed %}✅{% else %}⬜{% endif %}
+                {% if task.is_important %}⭐{% endif %}
+                <strong>{{ task.title }}</strong>
+                {% if task.due_date %} — {{ task.due_date }}{% endif %}
+                <small>({{ task.owner.username }})</small>
+                {% if task.description %}
+                    <p>{{ task.description }}</p>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Hali vazifalar yo'q. <a href="/admin/">Admin panelda qo'shing</a>.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
