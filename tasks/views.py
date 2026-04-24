@@ -8,14 +8,29 @@ from .models import Task
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.filter(owner=request.user)
+    all_tasks = Task.objects.filter(owner=request.user)
+
     stats = {
-        'total': tasks.count(),
-        'pending': tasks.filter(is_completed=False).count(),
-        'completed': tasks.filter(is_completed=True).count(),
-        'important': tasks.filter(is_important=True).count(),
+        'total': all_tasks.count(),
+        'pending': all_tasks.filter(is_completed=False).count(),
+        'completed': all_tasks.filter(is_completed=True).count(),
+        'important': all_tasks.filter(is_important=True).count(),
     }
-    return render(request, 'tasks/task_list.html', {'tasks': tasks, 'stats': stats})
+
+    current_filter = request.GET.get('filter', 'all')
+    tasks = all_tasks
+    if current_filter == 'pending':
+        tasks = tasks.filter(is_completed=False)
+    elif current_filter == 'completed':
+        tasks = tasks.filter(is_completed=True)
+    elif current_filter == 'important':
+        tasks = tasks.filter(is_important=True)
+
+    return render(request, 'tasks/task_list.html', {
+        'tasks': tasks,
+        'stats': stats,
+        'current_filter': current_filter,
+    })
 
 
 @login_required
