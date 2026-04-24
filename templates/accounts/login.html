@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Login — Todo App{% endblock %}
+
+{% block navbar_right %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="mb-4">
+                    <i class="bi bi-box-arrow-in-right"></i> Kirish
+                </h2>
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors|join:" " }}
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Username</label>
+                        <input type="text"
+                               name="username"
+                               id="id_username"
+                               class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                               value="{{ form.username.value|default:'' }}"
+                               autofocus
+                               required>
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback">{{ form.username.errors|join:" " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Parol</label>
+                        <input type="password"
+                               name="password"
+                               id="id_password"
+                               class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                               required>
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback">{{ form.password.errors|join:" " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Kirish
+                    </button>
+                </form>
+
+                <hr>
+
+                <p class="text-muted mb-0 text-center">
+                    Hali hisobingiz yo'qmi?
+                    <a href="{% url 'accounts:signup' %}">Ro'yxatdan o'ting</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
