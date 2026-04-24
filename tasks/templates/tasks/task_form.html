@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if mode == 'create' %}Yangi vazifa{% else %}Tahrirlash{% endif %} — Todo App
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="mb-4">
+                    {% if mode == 'create' %}
+                        <i class="bi bi-plus-circle"></i> Yangi vazifa
+                    {% else %}
+                        <i class="bi bi-pencil-square"></i> Tahrirlash
+                    {% endif %}
+                </h2>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Sarlavha <span class="text-danger">*</span></label>
+                        <input type="text"
+                               name="title"
+                               id="id_title"
+                               class="form-control {% if form.title.errors %}is-invalid{% endif %}"
+                               value="{{ form.title.value|default:'' }}"
+                               maxlength="200"
+                               autofocus
+                               required>
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback">{{ form.title.errors|join:" " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Tavsif</label>
+                        <textarea name="description"
+                                  id="id_description"
+                                  rows="3"
+                                  class="form-control {% if form.description.errors %}is-invalid{% endif %}">{{ form.description.value|default:'' }}</textarea>
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">{{ form.description.errors|join:" " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_due_date" class="form-label">Muddat</label>
+                        <input type="date"
+                               name="due_date"
+                               id="id_due_date"
+                               class="form-control {% if form.due_date.errors %}is-invalid{% endif %}"
+                               value="{{ form.due_date.value|date:'Y-m-d'|default:'' }}">
+                        {% if form.due_date.errors %}
+                            <div class="invalid-feedback">{{ form.due_date.errors|join:" " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-check mb-3">
+                                <input type="checkbox"
+                                       name="is_important"
+                                       id="id_is_important"
+                                       class="form-check-input"
+                                       {% if form.is_important.value %}checked{% endif %}>
+                                <label for="id_is_important" class="form-check-label">
+                                    <i class="bi bi-star-fill text-danger"></i> Muhim
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-check mb-3">
+                                <input type="checkbox"
+                                       name="is_completed"
+                                       id="id_is_completed"
+                                       class="form-check-input"
+                                       {% if form.is_completed.value %}checked{% endif %}>
+                                <label for="id_is_completed" class="form-check-label">
+                                    <i class="bi bi-check-circle-fill text-success"></i> Bajarilgan
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-lg"></i> Saqlash
+                        </button>
+                        <a href="{% url 'tasks:task_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg"></i> Bekor qilish
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
